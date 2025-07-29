@@ -61,11 +61,11 @@ class MixStyle(nn.Module):
             raise NotImplementedError(f"Mix strategy '{self.mix}' is not implemented.")
 
 
-        # 產生混合權重 (這部分邏輯不變)
+        # 產生混合權重 
         lmda = self.beta.sample((B, 1, 1, 1))
         lmda = lmda.to(x.device)
 
-        # 核心混合邏輯 (這部分邏輯不變)
+        # 核心混合邏輯 
         mu = x.mean(dim=[2, 3], keepdim=True)
         var = x.var(dim=[2, 3], keepdim=True)
         sig = (var + self.eps).sqrt()
