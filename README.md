@@ -60,7 +60,7 @@ conda activate crossview
 
 ### 2\. Download the Dataset
 
-This project uses the VIGOR (Vision for Geo-localization on a Rig) dataset. Please download it from the official source and extract the files.
+This project uses the VIGOR dataset. Please download it from the official source and extract the files.
 
 Next, update the `dataset_root` variable in the following scripts to point to your dataset's root directory:
 
