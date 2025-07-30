@@ -1,4 +1,4 @@
-name: ccvpe
+name: crossview
 channels:
   - pytorch
   - nvidia

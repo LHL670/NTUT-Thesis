@@ -55,7 +55,7 @@ All dependencies for this project are listed in the `environment.yaml` file. Use
 conda env create -f environment.yaml
 
 # Activate the environment
-conda activate ccvpe
+conda activate crossview
 ```
 
 ### 2\. Download the Dataset
