@@ -92,7 +92,8 @@ python train_VIGOR_wmask_wmixstyle.py \
     --n_layer 2 \
     --use_mask True \
     --use_mixstyle True \
-    --mixstyle_mix 'random'
+    --mixstyle_mix 'random' \
+    --dataset_root dataset_root
 ```
 
   - `--area`: Choose between 'samearea' or 'crossarea' training modes.
@@ -108,8 +109,9 @@ To evaluate a trained model, run the `eval_VIGOR_wmask_wmixstyle.py` script and 
 
 ```bash
 python eval_VIGOR_wmask_wmixstyle.py \
-    --model_path 'runs/samearea/pos/27.75/best.pt' \
-    --batch_size 2
+    --model_path model_path \
+    --batch_size 2 \
+    --dataset_root dataset_root
 ```
 
 Evaluation results, including mean/median errors, CED curves, and a detailed CSV report, will be saved in a `results/` folder within the model's directory.
@@ -123,8 +125,8 @@ This project includes several scripts to visualize the model's behavior and pred
 
     ```bash
     python visualization_png_loc_womask.py \
-        --model_path 'runs/samearea/pos/27.75/best.pt' \
-        --idx 30 \
+        --model_path model_path \
+        --idx 1 \
         --show_mask
     ```
 
@@ -136,8 +138,8 @@ This project includes several scripts to visualize the model's behavior and pred
 
     ```bash
     python visualization_cross_attenttion.py \
-        --resume 'runs/samearea/pos/27.75/best.pt' \
-        --img_idx 5606
+        --resume model_path\
+        --img_idx 1
     ```
 
 3.  **Semi-Positive Sample Visualization**
@@ -145,8 +147,8 @@ This project includes several scripts to visualize the model's behavior and pred
 
     ```bash
     python visualization_png_semi_positive.py \
-        --model_path 'runs/samearea/semi/45.48_semi_wicaf_wlum_adapted2d_wDA20250703_151501_samearea_nL2_T0.1_wd0.001_useMaskTrue_useMixStyleTrue_mix_random/best.pt' \
-        --idx 30
+        --model_path model_path \
+        --idx 1
     ```
 
 All visualization outputs will be saved in a `visualizations_*` folder inside the corresponding model checkpoint directory.

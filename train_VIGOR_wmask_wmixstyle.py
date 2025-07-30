@@ -49,6 +49,7 @@ parser.add_argument('--weight_decay', type=float, default=2e-3, help='Weight dec
 parser.add_argument('--resume', type=str, default=None, help='Path to checkpoint for resuming training')
 parser.add_argument('--dropout_rate', type=float, default=0.3, help='Dropout rate for decoder conv blocks')
 parser.add_argument('--use_mask', type=lambda x: (str(x).lower() == 'true'), default=True, help='Use semantic mask during training and validation')
+parser.add_argument('--dataset_root', type=str, default=None, help='Path to dataset')
 
 # MixStyle Arguments
 parser.add_argument('--use_mixstyle', type=lambda x: (str(x).lower() == 'true'), default=True)
@@ -57,11 +58,11 @@ parser.add_argument('--mixstyle_alpha', type=float, default=0.1)
 parser.add_argument('--mixstyle_mix', type=str, default='random', choices=['random', 'crossdomain'], help="MixStyle strategy")
 
 # Dataset Root
-# dataset_root = '/home/rvl/Documents/hsinling/dataset/VIGOR'
-dataset_root = '/home/lhl/Documents/VIGOR'
-# dataset_root = '/media/lhl/lulu/VIGOR'
-args = parser.parse_args()
 
+args = parser.parse_args()
+dataset_root = args.dataset_root
+# dataset_root = '/home/rvl/Documents/hsinling/dataset/VIGOR'
+# dataset_root = '/media/lhl/lulu/VIGOR'
 # Dataset and DataLoader
 print(f"Initializing dataset with use_mask={args.use_mask}")
 train_dataset = VIGORDataset(root=dataset_root, split=args.area, train=True, transform=None, pos_only=(args.pos_only=='True'), ori_noise=args.ori_noise, use_mask=args.use_mask)
@@ -154,8 +155,8 @@ for epoch in range(start_epoch, args.epochs):
     avg_epoch_train_loss = epoch_total_train_loss / len(train_dataloader)
     print(f'Epoch {epoch + 1}, Train Loss: {avg_epoch_train_loss:.3f}')
 
-
-    run_validation = True
+    run_validation = (epoch <  30 and (epoch + 1) % 3 == 0) or (epoch >= 30)
+    # run_validation = True
     
     if run_validation:
         print(f"--- Running validation for epoch {epoch + 1} ---")

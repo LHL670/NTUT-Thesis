@@ -1,0 +1,30 @@
+Model path: runs/samearea/semi/45.48/best.pt
+Area: samearea, Positive Only: False, Use Mask: True
+MixStyle Enabled: True, Strategy: random
+
+--- STATISTICAL ANALYSIS (Pixel Error) ---
+Mean      : 45.49 pixels
+Median    : 13.45 pixels
+Std       : 75.86 pixels
+Min       : 0.00 pixels
+Max       : 539.86 pixels
+Q1        : 7.07 pixels
+Q3        : 36.35 pixels
+
+--- STATISTICAL ANALYSIS (Original Calculation, meters) ---
+Mean      : 6.48 meters
+Median    : 1.92 meters
+Std       : 10.81 meters
+Min       : 0.00 meters
+Max       : 76.93 meters
+Q1        : 1.01 meters
+Q3        : 5.18 meters
+
+--- STATISTICAL ANALYSIS (City-Specific Calculation, meters) ---
+Mean      : 5.99 meters
+Median    : 1.74 meters
+Std       : 10.05 meters
+Min       : 0.00 meters
+Max       : 75.42 meters
+Q1        : 0.89 meters
+Q3        : 4.90 meters

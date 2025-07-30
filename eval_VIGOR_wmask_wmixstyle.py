@@ -5,7 +5,7 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 from torchvision import transforms
-from dataset.datasets_wicaf_wDA_wmask_aug import VIGORDataset
+from dataset.datasets_wicaf_wDA_wmask import VIGORDataset
 from model.models_wicaf_wlum_adapted2d_wDA_wmask_wmixstyle import CVM_VIGOR
 from tqdm import tqdm
 import csv
@@ -41,6 +41,8 @@ parser.add_argument('--model_path', type=str,
                     default='runs/samearea/pos/27.75/best.pt',
                     help='Path to the trained model checkpoint (e.g., best.pt)')
 parser.add_argument('--batch_size', type=int, default=2, help='Batch size for evaluation')
+parser.add_argument('--dataset_root', type=str, default='/home/lhl/Documents/VIGOR', help='Path to dataset')
+
 args = parser.parse_args()
 
 model_path = args.model_path
@@ -81,7 +83,8 @@ os.makedirs(output_dir, exist_ok=True)
 print(f"評估結果將儲存到: {output_dir}")
 
 # --- Dataset ---
-dataset_root = '/home/lhl/Documents/VIGOR' # <-- 請確認此路徑
+dataset_root = args.dataset_root
+# dataset_root = '/home/lhl/Documents/VIGOR' # <-- 請確認此路徑
 # dataset_root = '/home/rvl/Documents/hsinling/dataset/VIGOR'
 
 vigor = VIGORDataset(dataset_root, split=area, train=False, pos_only=pos_only, use_mask=use_mask)
