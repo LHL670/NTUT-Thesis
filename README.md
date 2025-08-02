@@ -1,5 +1,6 @@
+# CVM-VIGOR: Transformer-based Cross-View Geo-Localization
 
-This project implements Cross-View Matching for VIGOR, a deep learning model designed for cross-view geo-localization. The primary objective is to accurately match ground-level panoramic images (Street View Panoramas) with their corresponding satellite imagery.
+This project implements CVM-VIGOR (Cross-View Matching for VIGOR), a deep learning model designed for cross-view geo-localization. The primary objective is to accurately match ground-level panoramic images (Street View Panoramas) with their corresponding satellite imagery.
 
 The model utilizes a dual-branch EfficientNet as its backbone, enhanced by a Transformer-based fusion block for feature interaction and refinement. The final output is a heatmap that predicts the relative location of the ground-level image within the satellite view.
 
@@ -58,17 +59,44 @@ conda env create -f environment.yaml
 conda activate crossview
 ```
 
-### 2\. Download the Dataset
+### 2\. Download the VIGOR Dataset
 
-This project uses the VIGOR dataset. Please download it from the official source and extract the files.
+To get the VIGOR dataset, you must apply for access through the official GitHub repository. Follow the instructions on the site to submit a request:
+[**https://github.com/Jeff-Zilence/VIGOR**](https://github.com/Jeff-Zilence/VIGOR)
 
-Next, update the `dataset_root` variable in the following scripts to point to your dataset's root directory:
+Once you have access, download the data and extract it.
 
-  * `train_VIGOR_wmask_wmixstyle.py`
-  * `eval_VIGOR_wmask_wmixstyle.py`
-  * `visualization_*.py` (all visualization scripts)
+### 3\. Prepare the Dataset (Generate Semantic Masks)
 
-### 3\. Download Model Weights
+This project uses semantic masks as an additional input. To generate these masks, please use our other repository, which leverages the Segment Anything Model (SAM):
+[**https://github.com/LHL670/NTUT-Thesis-SAM-Geospatial**](https://github.com/LHL670/NTUT-Thesis-SAM-Geospatial)
+
+Follow the instructions in that repository to process the VIGOR satellite images and generate the corresponding masks. After generation, your dataset directory should be structured as follows:
+
+```
+<dataset_root>/
+├── Chicago
+│   ├── panorama
+│   ├── point_prompt_mask
+│   └── satellite
+├── NewYork
+│   ├── ...
+├── SanFrancisco
+│   ├── ...
+├── Seattle
+│   ├── ...
+└── splits__corrected
+    ├── Chicago
+    ├── NewYork
+    ├── SanFrancisco
+    └── Seattle
+```
+
+> **Note**: `splits__corrected` contains the revised ground truth from the [SliceMatch repository](https://github.com/tudelft-iv/SliceMatch).
+
+Finally, update the `dataset_root` variable in the scripts to point to your dataset's location.
+
+### 4\. Download Model Weights
 
 Pre-trained model weights are available for download from the following link:
 
@@ -93,13 +121,13 @@ python train_VIGOR_wmask_wmixstyle.py \
     --use_mask True \
     --use_mixstyle True \
     --mixstyle_mix 'random' \
-    --dataset_root dataset_root
+    --dataset_root <path_to_your_dataset_root>
 ```
 
-  - `--area`: Choose between 'samearea' or 'crossarea' training modes.
-  - `--use_mixstyle`: A boolean flag to enable or disable MixStyle.
-  - `--mixstyle_mix`: The MixStyle strategy, either 'random' or 'crossdomain'.
-  - `--use_mask`: A boolean flag to enable or disable the use of semantic masks during training.
+  * `--area`: Choose between 'samearea' or 'crossarea' training modes.
+  * `--use_mixstyle`: A boolean flag to enable or disable MixStyle.
+  * `--mixstyle_mix`: The MixStyle strategy, either 'random' or 'crossdomain'.
+  * `--use_mask`: A boolean flag to enable or disable the use of semantic masks during training.
 
 The trained model weights and configuration files will be saved under the `runs/VIGOR/` directory.
 
@@ -109,9 +137,9 @@ To evaluate a trained model, run the `eval_VIGOR_wmask_wmixstyle.py` script and 
 
 ```bash
 python eval_VIGOR_wmask_wmixstyle.py \
-    --model_path model_path \
+    --model_path <path_to_your_model.pt> \
     --batch_size 2 \
-    --dataset_root dataset_root
+    --dataset_root <path_to_your_dataset_root>
 ```
 
 Evaluation results, including mean/median errors, CED curves, and a detailed CSV report, will be saved in a `results/` folder within the model's directory.
@@ -125,20 +153,20 @@ This project includes several scripts to visualize the model's behavior and pred
 
     ```bash
     python visualization_png_loc_womask.py \
-        --model_path model_path \
+        --model_path <path_to_your_model.pt> \
         --idx 1 \
         --show_mask
     ```
 
-      - `--idx`: The index of the validation set image to visualize.
-      - `--show_mask`: If specified, the output will include a visualization of the input semantic mask.
+      * `--idx`: The index of the validation set image to visualize.
+      * `--show_mask`: If specified, the output will include a visualization of the input semantic mask.
 
 2.  **Cross-Attention Visualization**
     This script generates Grad-CAM outputs and Transformer attention maps to analyze the model's decision-making process.
 
     ```bash
     python visualization_cross_attenttion.py \
-        --resume model_path\
+        --resume <path_to_your_model.pt> \
         --img_idx 1
     ```
 
@@ -147,7 +175,7 @@ This project includes several scripts to visualize the model's behavior and pred
 
     ```bash
     python visualization_png_semi_positive.py \
-        --model_path model_path \
+        --model_path <path_to_your_model.pt> \
         --idx 1
     ```
 
